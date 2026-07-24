@@ -5,12 +5,16 @@ import java.time.LocalDateTime;
 
 import com.example.vacation_api.entities.enums.Status;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class VacationRequestResponseDto {
 

@@ -26,22 +26,22 @@ public class DataSeeder implements CommandLineRunner {
 
         Employee employee1 = new Employee();
         employee1.setName("John Doe");
-        employee1.setRole(RoleType.ROLE_EMPLOYEE);
+        employee1.setRole(RoleType.EMPLOYEE);
         employee1.setHiredDate(LocalDate.of(2020, 1, 15));
 
         Employee employee2 = new Employee();
         employee2.setName("Jane Smith");
-        employee2.setRole(RoleType.ROLE_MANAGER);
+        employee2.setRole(RoleType.MANAGER);
         employee2.setHiredDate(LocalDate.of(2019, 6, 1));
 
         Employee employee3 = new Employee();
         employee3.setName("Alice Johnson");
-        employee3.setRole(RoleType.ROLE_EMPLOYEE);
+        employee3.setRole(RoleType.EMPLOYEE);
         employee3.setHiredDate(LocalDate.of(2021, 3, 10));
 
         Employee employee4 = new Employee();
         employee4.setName("Bob Brown");
-        employee4.setRole(RoleType.ROLE_MANAGER);
+        employee4.setRole(RoleType.MANAGER);
         employee4.setHiredDate(LocalDate.of(2020, 9, 20));
 
         employeeRepository.save(employee1); // Clear existing data

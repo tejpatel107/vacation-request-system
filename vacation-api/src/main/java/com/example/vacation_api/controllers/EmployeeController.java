@@ -13,8 +13,8 @@ import com.example.vacation_api.entities.VacationRequest;
 import com.example.vacation_api.entities.enums.Status;
 
 @RestController
-@RequestMapping("worker/requests")
-public class WorkerController {
+@RequestMapping("employee/requests")
+public class EmployeeController {
     
     @GetMapping
     public List<VacationRequest> getVacationRequestsByWorker(@RequestParam Status status) {

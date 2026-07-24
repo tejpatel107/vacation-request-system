@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vacation_api.dtos.responseDtos.EmployeeOverviewResponseDto;
+import com.example.vacation_api.dtos.responseDtos.VacationRequestResponseDto;
 import com.example.vacation_api.entities.VacationRequest;
 import com.example.vacation_api.services.EmployeeService;
 import com.example.vacation_api.services.VacationRequestService;
@@ -25,7 +26,7 @@ public class ManagerController {
     public final VacationRequestService vacationRequestService;
 
     @GetMapping("/requests")
-    public List<VacationRequest> getAllVacationRequests(@RequestParam(required = false) String status) {
+    public List<VacationRequestResponseDto> getAllVacationRequests(@RequestParam(required = false) String status) {
         // Constructor logic if needed
         return vacationRequestService.getAllVacationRequests(status);
     }
