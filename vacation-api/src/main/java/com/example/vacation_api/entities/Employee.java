@@ -14,7 +14,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +27,8 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Employee {
     
@@ -41,7 +47,8 @@ public class Employee {
     private final int totalVacationDaysPerYear = 30;
 
     @Column(name = "remaining_vacation_days")
-    private int remainingVacationDays;
+    @Builder.Default
+    private int remainingVacationDays = 30;
 
     @Column(name = "hired_date")
     private LocalDate hiredDate;
@@ -50,5 +57,7 @@ public class Employee {
     @OneToMany(mappedBy = "author")
     private List<VacationRequest> vacationRequests = new ArrayList<>();
 
-
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -3,6 +3,7 @@ package com.example.vacation_api.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vacation_api.dtos.requestDtos.LoginRequestDto;
+import com.example.vacation_api.dtos.requestDtos.SignupRequestDto;
 import com.example.vacation_api.dtos.responseDtos.LoginResponseDto;
 import com.example.vacation_api.dtos.responseDtos.SignupResponseDto;
 import com.example.vacation_api.security.AuthService;
@@ -27,7 +28,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<SignupResponseDto> signup(@RequestBody LoginRequestDto signupRequestDto) {
+    public ResponseEntity<SignupResponseDto> signup(@RequestBody SignupRequestDto signupRequestDto) {
         //TODO: process POST request
         
         return ResponseEntity.ok(authService.signup(signupRequestDto));

@@ -9,12 +9,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.vacation_api.dtos.requestDtos.LoginRequestDto;
+import com.example.vacation_api.dtos.requestDtos.SignupRequestDto;
 import com.example.vacation_api.dtos.responseDtos.LoginResponseDto;
 import com.example.vacation_api.dtos.responseDtos.SignupResponseDto;
+import com.example.vacation_api.entities.Employee;
 import com.example.vacation_api.entities.User;
 import com.example.vacation_api.entities.enums.RoleType;
+import com.example.vacation_api.repositories.EmployeeRepository;
 import com.example.vacation_api.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,11 +45,12 @@ public class AuthService {
         return new LoginResponseDto(token, user.getId());
     }
 
-    public SignupResponseDto signup(LoginRequestDto signupRequestDto) {
+    @Transactional
+    public SignupResponseDto signup(SignupRequestDto signupRequestDto) {
         // TODO Auto-generated method stub
 
         log.info("Creating a user");
-        
+
         User user = userRepository.findByUsername(signupRequestDto.getUsername())
                 .orElse(null);
 
@@ -56,12 +61,21 @@ public class AuthService {
         String password = signupRequestDto.getPassword();
         RoleType role = signupRequestDto.getRole();
 
-        user = userRepository.save(
-                User.builder()
-                        .username(username)
-                        .password(passwordEncoder.encode(password))
-                        .roles(Set.of(role))
-                        .build());
+        Employee emp = Employee.builder()
+                .name(signupRequestDto.getName())
+                .role(signupRequestDto.getRole())
+                .hiredDate(signupRequestDto.getHiredDate())
+                .build();
+
+        user = User.builder()
+                .username(username)
+                .password(passwordEncoder.encode(password))
+                .roles(Set.of(role))
+                .employee(emp)
+                .build();
+
+        emp.setUser(user);
+        userRepository.save(user);
 
         return new SignupResponseDto(user.getId(), username);
     }

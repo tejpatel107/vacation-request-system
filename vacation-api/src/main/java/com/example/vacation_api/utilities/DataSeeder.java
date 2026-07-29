@@ -13,7 +13,7 @@ import com.example.vacation_api.repositories.VacationRepository;
 import com.example.vacation_api.entities.enums.Status;
 import lombok.RequiredArgsConstructor;
 
-@Component
+// @Component
 @RequiredArgsConstructor
 public class DataSeeder implements CommandLineRunner {
     

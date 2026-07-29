@@ -11,14 +11,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.vacation_api.dtos.responseDtos.EmployeeOverviewResponseDto;
 import com.example.vacation_api.dtos.responseDtos.VacationRequestResponseDto;
-import com.example.vacation_api.entities.VacationRequest;
+import com.example.vacation_api.entities.enums.Status;
 import com.example.vacation_api.services.EmployeeService;
 import com.example.vacation_api.services.VacationRequestService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RequiredArgsConstructor
 @RestController
+@Slf4j
 @RequestMapping("admin")
 public class ManagerController {
     
@@ -26,7 +28,7 @@ public class ManagerController {
     public final VacationRequestService vacationRequestService;
 
     @GetMapping("/requests")
-    public List<VacationRequestResponseDto> getAllVacationRequests(@RequestParam(required = false) String status) {
+    public List<VacationRequestResponseDto> getAllVacationRequests(@RequestParam(required = false) Status status) {
         // Constructor logic if needed
         return vacationRequestService.getAllVacationRequests(status);
     }

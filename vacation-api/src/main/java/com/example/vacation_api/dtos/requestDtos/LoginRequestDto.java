@@ -16,5 +16,4 @@ public class LoginRequestDto {
 
     String username;
     String password;
-    RoleType role;
 }
