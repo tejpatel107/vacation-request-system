@@ -31,7 +31,7 @@ public class EmployeeController {
     private final VacationRequestService vacationRequestService;
 
     @GetMapping
-    public ResponseEntity<List<VacationRequestResponseDto>> getVacationRequestsByWorker(@RequestParam Status status,
+    public ResponseEntity<List<VacationRequestResponseDto>> getVacationRequestsByWorker(@RequestParam(required = false) Status status,
             Authentication authentication) {
         // Logic to retrieve vacation requests for the given worker ID
         return new ResponseEntity<>(vacationRequestService
@@ -49,17 +49,19 @@ public class EmployeeController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
-        
+
     }
 
     @GetMapping("/remaining-days")
     public ResponseEntity<?> getRemainingVacationDays(Authentication authentication) {
         // Logic to calculate remaining vacation days
         try {
-            return new ResponseEntity<>(vacationRequestService.getRemainingVacationDays((User) authentication.getPrincipal()), HttpStatus.OK);
+            return new ResponseEntity<>(
+                    vacationRequestService.getRemainingVacationDays((User) authentication.getPrincipal()),
+                    HttpStatus.OK);
         } catch (Exception e) {
             // TODO Auto-generated catch block
-             return ResponseEntity
+            return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
@@ -70,12 +72,18 @@ public class EmployeeController {
             @RequestBody NewVacationRequestDto requestDto, Authentication authentication) throws BadRequestException {
 
         try {
+
+            if (requestDto.getStartDate().isAfter(requestDto.getEndDate())) {
+                throw new IllegalArgumentException(
+                        "Vacation start date must be on or before vacation end date.");
+            }
+            
             return new ResponseEntity<>(
-                    vacationRequestService.createNewVacationRequest(requestDto, (User)authentication.getPrincipal()),
+                    vacationRequestService.createNewVacationRequest(requestDto, (User) authentication.getPrincipal()),
                     HttpStatus.OK);
         } catch (Exception e) {
             // TODO: handle exception
-            
+
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());

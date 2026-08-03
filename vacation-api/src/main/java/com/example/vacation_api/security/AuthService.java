@@ -1,5 +1,7 @@
 package com.example.vacation_api.security;
 
+import java.time.Year;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,7 @@ import com.example.vacation_api.dtos.responseDtos.LoginResponseDto;
 import com.example.vacation_api.dtos.responseDtos.SignupResponseDto;
 import com.example.vacation_api.entities.Employee;
 import com.example.vacation_api.entities.User;
+import com.example.vacation_api.entities.VacationDaysBalance;
 import com.example.vacation_api.entities.enums.RoleType;
 import com.example.vacation_api.repositories.EmployeeRepository;
 import com.example.vacation_api.repositories.UserRepository;
@@ -66,6 +69,14 @@ public class AuthService {
                 .role(signupRequestDto.getRole())
                 .hiredDate(signupRequestDto.getHiredDate())
                 .build();
+
+        VacationDaysBalance balance = VacationDaysBalance
+                                            .builder()
+                                            .employee(emp)
+                                            .year(Year.of(signupRequestDto.getHiredDate().getYear()))
+                                            .build();
+        
+        emp.getVacationDaysBalance().add(balance);
 
         user = User.builder()
                 .username(username)

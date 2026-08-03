@@ -13,6 +13,7 @@ import com.example.vacation_api.entities.VacationRequest;
 import com.example.vacation_api.entities.enums.Status;
 import com.example.vacation_api.repositories.EmployeeRepository;
 import com.example.vacation_api.repositories.VacationRepository;
+import com.example.vacation_api.services.utilities.VacationDaysUtility;
 
 import lombok.RequiredArgsConstructor;
 
@@ -75,7 +76,7 @@ public class EmployeeService {
         overviewDto.setId(employee.getId());
         overviewDto.setName(employee.getName());
         overviewDto.setTotalVacationDaysPerYear(employee.getTotalVacationDaysPerYear());
-        overviewDto.setRemainingVacationDays(employee.getRemainingVacationDays());
+        overviewDto.setRemainingVacationDays(VacationDaysUtility.getRemainingVacationDaysBalance(employee));
         overviewDto.setPendingVacationRequest(pendingVacationRequests.isEmpty() ? null : pendingVacationRequests);
         overviewDto.setApprovedVacationRequest(approvedVacationRequests.isEmpty() ? null : approvedVacationRequests);
 

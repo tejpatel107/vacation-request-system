@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import com.example.vacation_api.entities.enums.RoleType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,9 +27,9 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
 public class Employee {
     
@@ -46,9 +47,13 @@ public class Employee {
     // @Column(name = "total_vacation_days_per_year")
     private final int totalVacationDaysPerYear = 30;
 
-    @Column(name = "remaining_vacation_days")
+    @OneToMany(
+        mappedBy = "employee",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     @Builder.Default
-    private int remainingVacationDays = 30;
+    private List<VacationDaysBalance> vacationDaysBalance = new ArrayList<VacationDaysBalance>();
 
     @Column(name = "hired_date")
     private LocalDate hiredDate;

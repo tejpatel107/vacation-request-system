@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.vacation_api.dtos.requestDtos.NewVacationRequestDto;
@@ -20,6 +19,7 @@ import com.example.vacation_api.entities.VacationRequest;
 import com.example.vacation_api.entities.enums.Status;
 import com.example.vacation_api.repositories.EmployeeRepository;
 import com.example.vacation_api.repositories.VacationRepository;
+import com.example.vacation_api.services.utilities.VacationDaysUtility;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -104,17 +104,10 @@ public class VacationRequestService {
     @Transactional
     public NewVacationRequestConfirmationResponseDto createNewVacationRequest(NewVacationRequestDto requestDto,
             User user) throws Exception {
-
+        
         Employee author = employeeRepository.findById(user.getEmployee().getId()).orElse(null);
-
-        int requestedDays = Math.abs((int) ChronoUnit.DAYS.between(
-                requestDto.getStartDate(),
-                requestDto.getEndDate())) + 1;
-
-        if (requestedDays > author.getRemainingVacationDays()) {
-            throw new Exception(
-                    "Total approved days including current requested days has exceeded your total vacation days for the year.");
-        }
+        
+        VacationDaysUtility.validate(author, requestDto);
 
         VacationRequest vacationRequest = VacationRequest.builder()
                 .author(author)
@@ -128,7 +121,6 @@ public class VacationRequestService {
         vacationRepository.save(vacationRequest);
 
         author.getVacationRequests().add(vacationRequest);
-        author.setRemainingVacationDays(author.getRemainingVacationDays() - requestedDays);
         employeeRepository.save(author);
 
         return NewVacationRequestConfirmationResponseDto.builder()
@@ -144,13 +136,14 @@ public class VacationRequestService {
         // TODO Auto-generated method stub
         
         Employee emp = employeeRepository.findById(user.getEmployee().getId()).orElse(null);
+        int remainingDays = VacationDaysUtility.getRemainingVacationDaysBalance(emp);
 
         return RemainingDaysResponseDto
                     .builder()
                     .employerId(emp.getId())
-                    .remainingDays(emp.getRemainingVacationDays())
+                    .remainingDays(remainingDays)
                     .totalVacationDays(emp.getTotalVacationDaysPerYear())
-                    .totalApprovedDays(emp.getTotalVacationDaysPerYear() - emp.getRemainingVacationDays())
+                    .totalApprovedDays(emp.getTotalVacationDaysPerYear()-remainingDays)
                     .year(Year.now())
                     .build();
     }
